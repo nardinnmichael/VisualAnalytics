@@ -1,4 +1,11 @@
 /Include/
 /Lib/
+/lib/
 /Scripts/
 /pyvenv.cfg
+/venv
+*.html
+/output/
+__pycache__/
+train.json
+.idea/
