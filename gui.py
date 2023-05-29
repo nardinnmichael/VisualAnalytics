@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets,QtWebEngineWidgets
 from PyQt5.QtWidgets import QLabel
+import os
 
 class Ui_MainWindow_TwitterInsights(object):
     def setupUi(self, MainWindow_TwitterInsights):
@@ -42,13 +43,12 @@ class Ui_MainWindow_TwitterInsights(object):
         self.graphicsView_communities = QtWidgets.QWidget(self.communities)
         self.graphicsView_communities.setObjectName("centralwidget")
         self.graphicsView_communities.webEngineView = QtWebEngineWidgets.QWebEngineView(self.graphicsView_communities)
-        self.graphicsView_communities.webEngineView.load(QtCore.QUrl().fromLocalFile('./html/communities.html'))
+        communityHtmlPath = os.path.abspath(os.path.join(os.path.dirname('gui.py'), "./html/communities.html"))
+        self.graphicsView_communities.webEngineView.load(QtCore.QUrl().fromLocalFile(communityHtmlPath))
         self.graphicsView_communities.setGeometry(QtCore.QRect(60, 110, 1331, 551))
         self.graphicsView_communities.webEngineView.setFixedWidth(1400)
         self.graphicsView_communities.webEngineView.setFixedHeight(2000)
-        #self.graphicsView_communities.webEngineView.setZoomFactor(5)
         self.graphicsView_communities.setLayoutDirection(QtCore.Qt.RightToLeft)
-        #self.graphicsView_communities = QtWidgets.QWidget()
         self.Qtab_Insights.addTab(self.communities, "")
         self.decomposition = QtWidgets.QWidget()
         self.decomposition.setObjectName("decomposition")
@@ -65,7 +65,8 @@ class Ui_MainWindow_TwitterInsights(object):
 
         self.graphicsView_decomposition = QtWidgets.QWidget(self.decomposition)
         self.graphicsView_decomposition.webEngineView = QtWebEngineWidgets.QWebEngineView(self.graphicsView_decomposition)
-        self.graphicsView_decomposition.webEngineView.load(QtCore.QUrl().fromLocalFile('./html/decomposition.html'))
+        decompositionHtmlPath = os.path.abspath(os.path.join(os.path.dirname('gui.py'), "./html/decomposition.html"))
+        self.graphicsView_decomposition.webEngineView.load(QtCore.QUrl().fromLocalFile(decompositionHtmlPath))
         self.graphicsView_decomposition.setGeometry(QtCore.QRect(60, 110, 1331, 551))
         self.graphicsView_decomposition.webEngineView.setFixedWidth(1400)
         self.graphicsView_decomposition.webEngineView.setFixedHeight(2000)
@@ -125,7 +126,8 @@ class Ui_MainWindow_TwitterInsights(object):
 
         self.graphicsView_influencers = QtWidgets.QWidget(self.influencers)
         self.graphicsView_influencers.webEngineView = QtWebEngineWidgets.QWebEngineView(self.graphicsView_influencers)
-        self.graphicsView_influencers.webEngineView.load(QtCore.QUrl().fromLocalFile('./html/influencers.html'))
+        influencersHtmlPath = os.path.abspath(os.path.join(os.path.dirname('gui.py'), "./html/influencers.html"))
+        self.graphicsView_influencers.webEngineView.load(QtCore.QUrl().fromLocalFile(influencersHtmlPath))
         self.graphicsView_influencers.setGeometry(QtCore.QRect(60, 110, 1331, 551))
         self.graphicsView_influencers.webEngineView.setFixedWidth(1400)
         self.graphicsView_influencers.webEngineView.setFixedHeight(2000)
@@ -137,7 +139,8 @@ class Ui_MainWindow_TwitterInsights(object):
 
         self.graphicsView_retweets = QtWidgets.QWidget(self.retweets)
         self.graphicsView_retweets.webEngineView = QtWebEngineWidgets.QWebEngineView(self.graphicsView_retweets)
-        self.graphicsView_retweets.webEngineView.load(QtCore.QUrl().fromLocalFile('./html/retweets.html'))
+        retweetsHtmlPath = os.path.abspath(os.path.join(os.path.dirname('gui.py'), "./html/retweets.html"))
+        self.graphicsView_retweets.webEngineView.load(QtCore.QUrl().fromLocalFile(retweetsHtmlPath))
         self.graphicsView_retweets.setGeometry(QtCore.QRect(60, 110, 1331, 551))
         self.graphicsView_retweets.webEngineView.setFixedWidth(1400)
         self.graphicsView_retweets.webEngineView.setFixedHeight(2000)
