@@ -1,6 +1,20 @@
 from PyQt5 import QtCore, QtGui, QtWidgets,QtWebEngineWidgets
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QLabel, QVBoxLayout
+import networkx as nx
+from pyvis.network import Network
 import os
+
+# tryout of pyvis, this should be in a function if it works
+# this just creates a random graph
+# Create a graph with NetworkX
+nx_G = nx.erdos_renyi_graph(30, 0.2)
+# Convert the NetworkX graph to a Pyvis network
+pyvis_net = Network(notebook=True)
+pyvis_net.from_nx(nx_G)
+# Save the Pyvis network as an HTML file
+pyvis_net.show("k_graph.html")
 
 class Ui_MainWindow_TwitterInsights(object):
     def setupUi(self, MainWindow_TwitterInsights):
@@ -27,6 +41,7 @@ class Ui_MainWindow_TwitterInsights(object):
         self.Qtab_Insights.setObjectName("Qtab_Insights")
         self.communities = QtWidgets.QWidget()
         self.communities.setObjectName("communities")
+
         self.CommunitiesShowBotsCheckBox = QtWidgets.QCheckBox(self.communities)
         self.CommunitiesShowBotsCheckBox.setGeometry(QtCore.QRect(70, 20, 111, 41))
         self.CommunitiesShowBotsCheckBox.setStyleSheet("")
@@ -43,13 +58,16 @@ class Ui_MainWindow_TwitterInsights(object):
         self.graphicsView_communities = QtWidgets.QWidget(self.communities)
         self.graphicsView_communities.setObjectName("centralwidget")
         self.graphicsView_communities.webEngineView = QtWebEngineWidgets.QWebEngineView(self.graphicsView_communities)
-        communityHtmlPath = os.path.abspath(os.path.join(os.path.dirname('gui.py'), "./html/communities.html"))
-        self.graphicsView_communities.webEngineView.load(QtCore.QUrl().fromLocalFile(communityHtmlPath))
+        # communityHtmlPath = os.path.abspath(os.path.join(os.path.dirname('gui.py'), "./html/communities.html"))
+        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "k_graph.html"))
+        local_url = QUrl.fromLocalFile(file_path)
+        self.graphicsView_communities.webEngineView.load(local_url)
         self.graphicsView_communities.setGeometry(QtCore.QRect(60, 110, 1331, 551))
         self.graphicsView_communities.webEngineView.setFixedWidth(1400)
         self.graphicsView_communities.webEngineView.setFixedHeight(2000)
         self.graphicsView_communities.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.Qtab_Insights.addTab(self.communities, "")
+
         self.decomposition = QtWidgets.QWidget()
         self.decomposition.setObjectName("decomposition")
         self.DecompositionShowBotsCheckBox = QtWidgets.QCheckBox(self.decomposition)
@@ -188,6 +206,7 @@ class Ui_MainWindow_TwitterInsights(object):
     def manageSliderChange(self,value):
         if(self.centralwidget.sender().objectName() == "KValueSlider"):
             self.KValueLabel.setText(str(value))
+            # TODO: call algo, get new network, display the update
             self.graphicsView_decomposition.webEngineView.reload()
         if(self.centralwidget.sender().objectName() == "NumberOfAccountSlider"):
             self.NumberOfAccountLabel.setText(str(value))
