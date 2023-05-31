@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QApplication
 
 import parser
-import view
+import view_old
 from plotting import *
 from algos import *
 import networkx as nx
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     # Starting the GUI
     app = QApplication(sys.argv)
-    window = view.MainWindow(G=G, G_x=G_x, G_undirected=G_undirected)
+    window = view_old.MainWindow(G=G, G_x=G_x, G_undirected=G_undirected)
     window.show()
     app.exec_()
 

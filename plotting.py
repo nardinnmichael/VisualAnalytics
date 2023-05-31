@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import time
 import numpy
 
-# already used in the view.py in tab5. Works as intended.
+# already used in the view_old.py in tab5. Works as intended.
 def plot_degree_centrality(G):
     dd = sorted(nk.centrality.DegreeCentrality(G).run().scores(), reverse=True)
     degrees, numberOfNodes = numpy.unique(dd, return_counts=True)
@@ -33,7 +33,7 @@ def plot_k_core_decomposition(G, kcore):
     plt.show()
 
 
-# already used in the view.py in tab1. Works as intended.
+# already used in the view_old.py in tab1. Works as intended.
 # plots a plot with two subplots
 def plot_communities_info(G):
     communities = nk.community.detectCommunities(G, algo=nk.community.PLM(G, True))
