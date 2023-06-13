@@ -4,7 +4,8 @@ from networkit import *
 import matplotlib.pyplot as plt
 import time
 import numpy
-
+import networkx as nx
+from pyvis.network import Network
 # already used in the view_old.py in tab5. Works as intended.
 def plot_degree_centrality(G):
     dd = sorted(nk.centrality.DegreeCentrality(G).run().scores(), reverse=True)
@@ -15,22 +16,31 @@ def plot_degree_centrality(G):
     plt.yscale("log")
     plt.ylabel("number of nodes")
     plt.plot(degrees, numberOfNodes)
-    # plt.show()
+    #plt.show()
     return fig
 
 # TODO: fix this. Implement in algos.py and call here or put everything here
 # this does not finish at my machine. Maybe the loops that are in the graph are a problem, not sure
-def plot_k_core_decomposition(G, kcore):
+def plot_k_core_decomposition(G):
     print("Starting k-core")
     coreDec = nk.centrality.CoreDecomposition(G)
     print("Running coreDec")
     coreDec.run()
-    print("Setting scores")
-    set(coreDec.scores())
-    print(f"Plotting graph for {coreDec.scores()}")
-    nk.viztasks.drawGraph(G, node_size=[(k ** 2) * 20 for k in coreDec.scores()])
-    print("Showing the plot")
-    plt.show()
+    #print("Setting scores")
+    #set(coreDec.scores())
+    #print(f"Plotting graph for {coreDec.scores()}")
+    # code works from here, above code seems redundant
+    nxG = nk.nxadapter.nk2nx(G)
+    k = nx.k_core(nxG)
+    nt = Network('500px', '500px',notebook=True, cdn_resources='remote')
+
+    nt.from_nx(k)
+    nt.show("k_graph.html")
+
+    #nx.draw_networkx(k, with_labels=True)
+    #nk.viztasks.drawGraph(G, node_size=[(k ** 2) * 20 for k in coreDec.scores()], with_labels=True)
+    print("Showing the plot for {}".format(k))
+    #plt.show()
 
 
 # already used in the view_old.py in tab1. Works as intended.

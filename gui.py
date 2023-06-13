@@ -9,12 +9,12 @@ import os
 # tryout of pyvis, this should be in a function if it works
 # this just creates a random graph
 # Create a graph with NetworkX
-nx_G = nx.erdos_renyi_graph(30, 0.2)
+#nx_G = nx.erdos_renyi_graph(30, 0.2)
 # Convert the NetworkX graph to a Pyvis network
-pyvis_net = Network(notebook=True)
-pyvis_net.from_nx(nx_G)
+#pyvis_net = Network(notebook=True, cdn_resources='remote')
+#pyvis_net.from_nx(nx_G)
 # Save the Pyvis network as an HTML file
-pyvis_net.show("k_graph.html")
+#pyvis_net.show("k_graph.html")
 
 class Ui_MainWindow_TwitterInsights(object):
     def setupUi(self, MainWindow_TwitterInsights):
@@ -169,7 +169,7 @@ class Ui_MainWindow_TwitterInsights(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(30, 30, 231, 41))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("../twitter insights.png"))
+        self.label.setPixmap(QtGui.QPixmap("./images/twitter insights.png"))
         self.label.setObjectName("label")
         MainWindow_TwitterInsights.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow_TwitterInsights)

@@ -38,12 +38,12 @@ class MainWindow(QMainWindow):
         # tryout of pyvis, this should be in a function if it works
         # this just creates a random graph
         # Create a graph with NetworkX
-        nx_G = nx.erdos_renyi_graph(30, 0.2)
+        #nx_G = nx.erdos_renyi_graph(30, 0.2)
         # Convert the NetworkX graph to a Pyvis network
-        pyvis_net = Network(notebook=True)
-        pyvis_net.from_nx(nx_G)
+        #pyvis_net = Network(notebook=True)
+        #pyvis_net.from_nx(nx_G)
         # Save the Pyvis network as an HTML file
-        pyvis_net.show("graph.html")
+        #pyvis_net.show("graph.html")
 
         # Create the tab widget
         self.tabs = QTabWidget()
@@ -74,7 +74,7 @@ class MainWindow(QMainWindow):
         # For the second tab, we create a QWebEngineView, load the graph, and add it to the tab
         self.view2 = QWebEngineView()
         # self.setGeometry(0, 0, 800, 600) # you can use this to position and size the graph
-        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "graph.html"))
+        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "k_graph.html"))
         local_url = QUrl.fromLocalFile(file_path)
         self.view2.load(local_url)
 
