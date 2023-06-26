@@ -1,3 +1,4 @@
+
 # This file is intended for the GUI and / or the visualizion functions of the graphs
 import networkit as nk
 from networkit import *
@@ -6,7 +7,11 @@ import time
 import numpy
 import networkx as nx
 from pyvis.network import Network
+import textwrap
 # already used in the view_old.py in tab5. Works as intended.
+import parser
+
+
 def plot_degree_centrality(G):
     dd = sorted(nk.centrality.DegreeCentrality(G).run().scores(), reverse=True)
     degrees, numberOfNodes = numpy.unique(dd, return_counts=True)
@@ -16,6 +21,7 @@ def plot_degree_centrality(G):
     plt.yscale("log")
     plt.ylabel("number of nodes")
     plt.plot(degrees, numberOfNodes)
+    plt.savefig('./images/centrality.png')
     #plt.show()
     return fig
 
@@ -26,13 +32,15 @@ def plot_k_core_decomposition(G):
     coreDec = nk.centrality.CoreDecomposition(G)
     print("Running coreDec")
     coreDec.run()
+    set(coreDec.scores())
+    #print(coreDec.scores())
     #print("Setting scores")
     #set(coreDec.scores())
     #print(f"Plotting graph for {coreDec.scores()}")
     # code works from here, above code seems redundant
     nxG = nk.nxadapter.nk2nx(G)
     k = nx.k_core(nxG)
-    nt = Network('500px', '500px',notebook=True, cdn_resources='remote')
+    nt = Network('600px', '1400px',notebook=True, cdn_resources='remote')
 
     nt.from_nx(k)
     nt.show("k_graph.html")
@@ -62,6 +70,28 @@ def plot_communities_info(G):
     ax2.set_ylabel("size")
     ax2.plot(sizes)
     plt.subplots_adjust(hspace=0.5)
+    plt.savefig('./images/Communities.png')
     # plt.show()
     return fig
+def wrap_labels(ax, width, break_long_words=False):
+    labels = []
+    for label in ax.get_xticklabels():
+        text = label.get_text()
+        labels.append(textwrap.fill(text, width=width,
+                      break_long_words=break_long_words))
+    ax.set_xticklabels(labels, rotation=0)
 
+def formatter(x, pos):
+    return str(round(x / 1e6, 1)) + " M"
+
+def get_Top_Accounts(n,type):
+    influencers = parser.get_Top_N_Accounts(n, type)
+    influencers.plot(kind='bar', edgecolor='black', rot=0)
+    ax = influencers.plot.bar(x='profile.name', y='profile.followers_count', rot=0, legend=False,
+                              color=['green', 'blue', 'red','orange','black'],xlabel='')
+    ax.yaxis.set_major_formatter(formatter)
+
+    wrap_labels(ax, 15)
+    plt.savefig('./images/Influencers.png')
+    plt.clf()
+    #plt.show()

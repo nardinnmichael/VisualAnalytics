@@ -3,12 +3,12 @@ import pandas as pd
 import time
 import networkit as nk
 import os
-
+import numpy
 
 def parse_tweets_as_df(filename):
     start = time.time()
     columns_to_keep = ["ID", "tweet", "profile.id", "profile.name", "profile.followers_count", "profile.friends_count",
-                       "profile.verified", "profile.statuses_count", "neighbor.following", "neighbor.follower"]
+                       "profile.verified", "profile.statuses_count", "neighbor.following", "neighbor.follower","label"]
     with open(filename, 'r') as file:
         objects = ijson.items(file, 'item')
 
@@ -22,17 +22,25 @@ def parse_tweets_as_df(filename):
             except:
                 ()
         df = pd.concat(dfs, ignore_index=True)
-        df['ID'] = df['ID'].astype(int)
-        df['profile.id'] = df['profile.id'].astype(int)
+        df['ID'] = df['ID'].astype(numpy.int64)
+        df['profile.id'] = df['profile.id'].astype(numpy.int64)
         df['profile.followers_count'] = df['profile.followers_count'].astype(int)
         df['profile.friends_count'] = df['profile.friends_count'].astype(int)
         df['profile.verified'] = df['profile.verified'].astype(bool)
         df['profile.statuses_count'] = df['profile.statuses_count'].astype(int)
+        df['label'] = df['label'].astype(int)
 
         end = time.time()
-
+        df.to_pickle("df.pkl")
         print(f"Parsed {df['ID'].count()} users in",  "{:.2f}".format(end - start), " seconds.")
         return df
+
+def get_Top_N_Accounts(n,type):
+    df = pd.read_pickle("df.pkl")
+    if(type!=2):
+        df = df[df['label'] == type]
+    influencersAccounts = df.nlargest(n, ['profile.followers_count'])
+    return influencersAccounts[['profile.name','profile.followers_count']]
 
 def get_graph(df, directed=True):
     # Create a directed graph

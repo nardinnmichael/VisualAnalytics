@@ -1,20 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets,QtWebEngineWidgets
-from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QLabel, QVBoxLayout
-import networkx as nx
-from pyvis.network import Network
-import os
-
-# tryout of pyvis, this should be in a function if it works
-# this just creates a random graph
-# Create a graph with NetworkX
-#nx_G = nx.erdos_renyi_graph(30, 0.2)
-# Convert the NetworkX graph to a Pyvis network
-#pyvis_net = Network(notebook=True, cdn_resources='remote')
-#pyvis_net.from_nx(nx_G)
-# Save the Pyvis network as an HTML file
-#pyvis_net.show("k_graph.html")
+from plotting import *
+from algos import *
 
 class Ui_MainWindow_TwitterInsights(object):
     def setupUi(self, MainWindow_TwitterInsights):
@@ -58,8 +45,7 @@ class Ui_MainWindow_TwitterInsights(object):
         self.graphicsView_communities = QtWidgets.QWidget(self.communities)
         self.graphicsView_communities.setObjectName("centralwidget")
         self.graphicsView_communities.webEngineView = QtWebEngineWidgets.QWebEngineView(self.graphicsView_communities)
-        # communityHtmlPath = os.path.abspath(os.path.join(os.path.dirname('gui.py'), "./html/communities.html"))
-        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "k_graph.html"))
+        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "./html/communities.html"))
         local_url = QUrl.fromLocalFile(file_path)
         self.graphicsView_communities.webEngineView.load(local_url)
         self.graphicsView_communities.setGeometry(QtCore.QRect(60, 110, 1331, 551))
@@ -83,11 +69,12 @@ class Ui_MainWindow_TwitterInsights(object):
 
         self.graphicsView_decomposition = QtWidgets.QWidget(self.decomposition)
         self.graphicsView_decomposition.webEngineView = QtWebEngineWidgets.QWebEngineView(self.graphicsView_decomposition)
-        decompositionHtmlPath = os.path.abspath(os.path.join(os.path.dirname('gui.py'), "./html/decomposition.html"))
+        #decompositionHtmlPath = os.path.abspath(os.path.join(os.path.dirname('gui.py'), "./html/decomposition.html"))
+        decompositionHtmlPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "k_graph.html"))
         self.graphicsView_decomposition.webEngineView.load(QtCore.QUrl().fromLocalFile(decompositionHtmlPath))
         self.graphicsView_decomposition.setGeometry(QtCore.QRect(60, 110, 1331, 551))
         self.graphicsView_decomposition.webEngineView.setFixedWidth(1400)
-        self.graphicsView_decomposition.webEngineView.setFixedHeight(2000)
+        self.graphicsView_decomposition.webEngineView.setFixedHeight(800)
         self.graphicsView_decomposition.setLayoutDirection(QtCore.Qt.RightToLeft)
 
         self.KValueSlider = QtWidgets.QSlider(self.decomposition)
@@ -126,9 +113,9 @@ class Ui_MainWindow_TwitterInsights(object):
         self.NumberOfAccountSlider = QtWidgets.QSlider(self.influencers)
         self.NumberOfAccountSlider.setGeometry(QtCore.QRect(1030, 30, 160, 22))
         self.NumberOfAccountSlider.setMinimum(1)
-        self.NumberOfAccountSlider.setMaximum(10)
-        self.NumberOfAccountSlider.setProperty("value", 5)
-        self.NumberOfAccountSlider.setSliderPosition(5)
+        self.NumberOfAccountSlider.setMaximum(5)
+        self.NumberOfAccountSlider.setProperty("value", 3)
+        self.NumberOfAccountSlider.setSliderPosition(3)
         self.NumberOfAccountSlider.setOrientation(QtCore.Qt.Horizontal)
         self.NumberOfAccountSlider.setObjectName("NumberOfAccountSlider")
         self.NumberOfAccountSlider.valueChanged.connect(self.manageSliderChange)
@@ -139,7 +126,7 @@ class Ui_MainWindow_TwitterInsights(object):
 
         self.NumberOfAccountLabel = QtWidgets.QLabel(self.influencers)
         self.NumberOfAccountLabel.setGeometry(QtCore.QRect(1210, 30, 55, 16))
-        self.NumberOfAccountLabel.setText("5")
+        self.NumberOfAccountLabel.setText("3")
         self.NumberOfAccountLabel.setObjectName("NumberOfAccountLabel")
 
         self.graphicsView_influencers = QtWidgets.QWidget(self.influencers)
@@ -163,9 +150,21 @@ class Ui_MainWindow_TwitterInsights(object):
         self.graphicsView_retweets.webEngineView.setFixedWidth(1400)
         self.graphicsView_retweets.webEngineView.setFixedHeight(2000)
         self.graphicsView_retweets.setLayoutDirection(QtCore.Qt.RightToLeft)
-
-
         self.Qtab_Insights.addTab(self.retweets, "")
+
+
+        self.centrality = QtWidgets.QWidget()
+        self.centrality.setObjectName("centrality")
+        self.graphicsView_centrality = QtWidgets.QWidget(self.centrality)
+        self.graphicsView_centrality.webEngineView = QtWebEngineWidgets.QWebEngineView(self.graphicsView_centrality)
+        centralityHtmlPath = os.path.abspath(os.path.join(os.path.dirname('gui.py'), "./html/centrality.html"))
+        self.graphicsView_centrality.webEngineView.load(QtCore.QUrl().fromLocalFile(centralityHtmlPath))
+        self.graphicsView_centrality.setGeometry(QtCore.QRect(60, 110, 1331, 551))
+        self.graphicsView_centrality.webEngineView.setFixedWidth(1400)
+        self.graphicsView_centrality.webEngineView.setFixedHeight(2000)
+        self.graphicsView_centrality.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.Qtab_Insights.addTab(self.centrality, "")
+
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(30, 30, 231, 41))
         self.label.setText("")
@@ -201,6 +200,7 @@ class Ui_MainWindow_TwitterInsights(object):
         # self.Humans.setText(_translate("MainWindow_TwitterInsights", "Humans: "))
         self.Qtab_Insights.setTabText(self.Qtab_Insights.indexOf(self.influencers), _translate("MainWindow_TwitterInsights", "     Influencers       "))
         self.Qtab_Insights.setTabText(self.Qtab_Insights.indexOf(self.retweets), _translate("MainWindow_TwitterInsights", "       Retweets          "))
+        self.Qtab_Insights.setTabText(self.Qtab_Insights.indexOf(self.centrality), _translate("MainWindow_TwitterInsights", "       Centrality          "))
 
     # setting KValueLabel and NumberOfAccountLabel Based on the corresponding slider value
     def manageSliderChange(self,value):
@@ -210,8 +210,15 @@ class Ui_MainWindow_TwitterInsights(object):
             self.graphicsView_decomposition.webEngineView.reload()
         if(self.centralwidget.sender().objectName() == "NumberOfAccountSlider"):
             self.NumberOfAccountLabel.setText(str(value))
+            if (self.InfluencersShowHumansCheckBox.isChecked() == False):
+                type = 1
+            else:
+                if (self.InfluencersShowBotsCheckBox.isChecked() == False):
+                    type = 0
+                else:
+                    type = 2
+            get_Top_Accounts(value,type)
             self.graphicsView_influencers.webEngineView.reload()
-
 
     # Handle Communities Checkboxes
     def handleCommunitiesCheckboxes(self,state):
@@ -222,6 +229,7 @@ class Ui_MainWindow_TwitterInsights(object):
             self.CommunitiesShowBotsCheckBox.setChecked(True)
         #updatecommuntiesdiagram(self.CommunitiesShowBotsCheckBox.state(),self.CommunitiesShowHumansCheckBox.state())
         self.graphicsView_communities.webEngineView.reload()
+
     # Handle Decomposition Checkboxes
     def handleDecompositionCheckboxes(self,state):
         #updateDecompositiondiagram(self.DecompositionShowBotsCheckBox.state(),self.DecompositionShowHumansCheckBox.state(),self.KValueSlider.value())
@@ -232,6 +240,7 @@ class Ui_MainWindow_TwitterInsights(object):
             self.DecompositionShowBotsCheckBox.setChecked(True)
         self.graphicsView_decomposition.webEngineView.reload()
     # Handle Influencers Checkboxes
+
     def handleInfluencersCheckboxes(self,state):
         #updateInfluencersdiagram(self.InfluencersShowBotsCheckBox.state(),self.InfluencersShowHumansCheckBox.state(),self.NumberOfAccountSlider.value())
         if state == QtCore.Qt.Unchecked:
@@ -239,9 +248,32 @@ class Ui_MainWindow_TwitterInsights(object):
             self.InfluencersShowHumansCheckBox.setChecked(True)
           if(self.centralwidget.sender().objectName() =="InfluencersShowHumansCheckBox"):
             self.InfluencersShowBotsCheckBox.setChecked(True)
+        if (self.InfluencersShowHumansCheckBox.isChecked() == False):
+            type = 1
+        else:
+            if (self.InfluencersShowBotsCheckBox.isChecked() == False):
+                type = 0
+            else:
+                type = 2
+        get_Top_Accounts(self.NumberOfAccountSlider.value(), type)
         self.graphicsView_influencers.webEngineView.reload()
+
 if __name__ == "__main__":
     import sys
+    print(
+        f"current number of threads is {nk.getCurrentNumberOfThreads()}, lets increase this to {(nk.getMaxNumberOfThreads() / 2) + 1}")
+    nk.setNumberOfThreads((nk.getMaxNumberOfThreads() / 2) + 1)  # set the maximum number of available threads
+    df = parser.parse_tweets_as_df("test.json")
+    print(df.columns)
+    G, G_x = parser.get_graph(df)
+    G_undirected, _ = parser.get_graph(df, directed=False)
+    get_Top_Accounts(3,2)
+
+    # Algos
+    plot_degree_centrality(G)
+    plot_communities_info(G_undirected)
+    plot_k_core_decomposition(G)
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow_TwitterInsights = QtWidgets.QMainWindow()
     ui = Ui_MainWindow_TwitterInsights()
