@@ -263,17 +263,17 @@ if __name__ == "__main__":
     print(
         f"current number of threads is {nk.getCurrentNumberOfThreads()}, lets increase this to {(nk.getMaxNumberOfThreads() / 2) + 1}")
     nk.setNumberOfThreads((nk.getMaxNumberOfThreads() / 2) + 1)  # set the maximum number of available threads
-    df = parser.parse_tweets_as_df("test.json")
+    df = parse.parse_tweets_as_df("test.json")
     print(df.columns)
-    G, G_x = parser.get_graph(df)
-    G_undirected, _ = parser.get_graph(df, directed=False)
+    G, G_x = parse.get_graph(df)
+    G_undirected, _ = parse.get_graph(df, directed=False)
     get_Top_Accounts(3,2)
 
     # Algos
     plot_degree_centrality(G)
     plot_communities_info(G_undirected)
     plot_k_core_decomposition(G)
-
+    plot_User_Type_Ratio()
     app = QtWidgets.QApplication(sys.argv)
     MainWindow_TwitterInsights = QtWidgets.QMainWindow()
     ui = Ui_MainWindow_TwitterInsights()
