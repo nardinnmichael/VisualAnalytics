@@ -10,7 +10,7 @@ import networkx as nx
 from pyvis.network import Network
 import textwrap
 # already used in the view_old.py in tab5. Works as intended.
-import parse
+import parser
 
 
 def plot_degree_centrality(G):
@@ -86,7 +86,7 @@ def formatter(x, pos):
     return str(round(x / 1e6, 1)) + " M"
 
 def get_Top_Accounts(n,type):
-    influencers = parse.get_Top_N_Accounts(n, type)
+    influencers = parser.get_Top_N_Accounts(n, type)
     influencers.plot(kind='bar', edgecolor='black', rot=0)
     ax = influencers.plot.bar(x='profile.name', y='profile.followers_count', rot=0, legend=False,
                               color=['royalblue', 'darkorange','green', 'red','black'],xlabel='')

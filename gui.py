@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets,QtWebEngineWidgets
 from PyQt5.QtCore import *
 from plotting import *
 from algos import *
+import parser
 
 class Ui_MainWindow_TwitterInsights(object):
     def setupUi(self, MainWindow_TwitterInsights):
@@ -263,10 +264,10 @@ if __name__ == "__main__":
     print(
         f"current number of threads is {nk.getCurrentNumberOfThreads()}, lets increase this to {(nk.getMaxNumberOfThreads() / 2) + 1}")
     nk.setNumberOfThreads((nk.getMaxNumberOfThreads() / 2) + 1)  # set the maximum number of available threads
-    df = parse.parse_tweets_as_df("test.json")
+    df = parser.parse_tweets_as_df("test.json")
     print(df.columns)
-    G, G_x = parse.get_graph(df)
-    G_undirected, _ = parse.get_graph(df, directed=False)
+    G, G_x = parser.get_graph(df)
+    G_undirected, _ = parser.get_graph(df, directed=False)
     get_Top_Accounts(3,2)
 
     # Algos
