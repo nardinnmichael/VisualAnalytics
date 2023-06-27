@@ -8,7 +8,11 @@ import numpy
 def parse_tweets_as_df(filename):
     start = time.time()
     columns_to_keep = ["ID", "tweet", "profile.id", "profile.name", "profile.followers_count", "profile.friends_count",
+<<<<<<< HEAD
                        "profile.verified", "profile.statuses_count", "neighbor.following", "neighbor.follower","label"]
+=======
+                       "profile.verified", "profile.statuses_count", "neighbor.following", "neighbor.follower","label"] #added label
+>>>>>>> ffb57f0 (Node colors and user verification attributes added)
     with open(filename, 'r') as file:
         objects = ijson.items(file, 'item')
 
@@ -26,7 +30,7 @@ def parse_tweets_as_df(filename):
         df['profile.id'] = df['profile.id'].astype(numpy.int64)
         df['profile.followers_count'] = df['profile.followers_count'].astype(int)
         df['profile.friends_count'] = df['profile.friends_count'].astype(int)
-        df['profile.verified'] = df['profile.verified'].astype(bool)
+        df['profile.verified'] = df['profile.verified']
         df['profile.statuses_count'] = df['profile.statuses_count'].astype(int)
         df['label'] = df['label'].astype(int)
 
@@ -45,20 +49,33 @@ def get_Top_N_Accounts(n,type):
 def get_graph(df, directed=True):
     # Create a directed graph
     G = nk.Graph(directed=directed)
+    # Attach color attribute to each node
+    att = G.attachNodeAttribute("color", str)
 
     # Create dictionaries for mapping
     id_to_node = {}
     node_to_id = {}
-
+    node_to_att = {}
     # Add nodes and edges to the graph
     for idx, row in df.iterrows():
         user_id = row['ID']
+
+        if row['label'] == 1:
+            col = 'green'
+        else :
+            col = 'red'
+        if 'True' in row['profile.verified'] :
+            shape = 'square'
+        else:
+            shape = 'dot'
 
         # If the user_id is not in the dictionary, add a new node
         if user_id not in id_to_node:
             new_node = G.addNode()
             id_to_node[user_id] = new_node
             node_to_id[new_node] = user_id
+            att[new_node] = col
+            node_to_att[new_node] = [col, shape]
 
         for following_id in row['neighbor.following']:
             # If the following_id is not in the dictionary, add a new node
@@ -66,6 +83,8 @@ def get_graph(df, directed=True):
                 new_node = G.addNode()
                 id_to_node[following_id] = new_node
                 node_to_id[new_node] = following_id
+                att[new_node] = col
+                node_to_att[new_node] = [col,shape]
 
             G.addEdge(id_to_node[user_id], id_to_node[following_id])
 
@@ -75,8 +94,11 @@ def get_graph(df, directed=True):
                 new_node = G.addNode()
                 id_to_node[follower_id] = new_node
                 node_to_id[new_node] = follower_id
+                att[new_node] = col
+                node_to_att[new_node] = [col,shape]
 
-            G.addEdge(id_to_node[follower_id], id_to_node[user_id])
+        G.addEdge(id_to_node[follower_id], id_to_node[user_id])
+
     # print(nk.overview(G))
     print(f"There are {G.numberOfEdges()} edges")
     # write the graph to file
@@ -93,6 +115,10 @@ def get_graph(df, directed=True):
     #     print(n1, n2, attr)
     if directed is True:
         G_x = nk.nxadapter.nk2nx(G)  # convert from NetworKit.Graph to networkx.Graph
-        return G, G_x
+        return G, G_x, node_to_att
     else:
+<<<<<<< HEAD
         return G, None
+=======
+        return G, node_to_att
+>>>>>>> ffb57f0 (Node colors and user verification attributes added)
