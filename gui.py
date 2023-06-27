@@ -5,7 +5,9 @@ from algos import *
 import parser
 
 class Ui_MainWindow_TwitterInsights(object):
+    # this works as a init function for the UI
     def setupUi(self, MainWindow_TwitterInsights):
+        # set global paramters of the GUI
         MainWindow_TwitterInsights.setObjectName("MainWindow_TwitterInsights")
         MainWindow_TwitterInsights.resize(1521, 831)
         MainWindow_TwitterInsights.setAcceptDrops(False)
@@ -30,19 +32,7 @@ class Ui_MainWindow_TwitterInsights(object):
         self.communities = QtWidgets.QWidget()
         self.communities.setObjectName("communities")
 
-        # self.CommunitiesShowBotsCheckBox = QtWidgets.QCheckBox(self.communities)
-        # self.CommunitiesShowBotsCheckBox.setGeometry(QtCore.QRect(70, 20, 111, 41))
-        # self.CommunitiesShowBotsCheckBox.setStyleSheet("")
-        # self.CommunitiesShowBotsCheckBox.setChecked(True)
-        # self.CommunitiesShowBotsCheckBox.setObjectName("CommunitiesShowBotsCheckBox")
-        # self.CommunitiesShowBotsCheckBox.stateChanged.connect(self.handleCommunitiesCheckboxes)
-        #
-        #
-        # self.CommunitiesShowHumansCheckBox = QtWidgets.QCheckBox(self.communities)
-        # self.CommunitiesShowHumansCheckBox.setGeometry(QtCore.QRect(70, 60, 171, 20))
-        # self.CommunitiesShowHumansCheckBox.setChecked(True)
-        # self.CommunitiesShowHumansCheckBox.setObjectName("CommunitiesShowHumansCheckBox")
-        # self.CommunitiesShowHumansCheckBox.stateChanged.connect(self.handleCommunitiesCheckboxes)
+        # The communities tab
         self.graphicsView_communities = QtWidgets.QWidget(self.communities)
         self.graphicsView_communities.setObjectName("centralwidget")
         self.graphicsView_communities.webEngineView = QtWebEngineWidgets.QWebEngineView(self.graphicsView_communities)
@@ -55,18 +45,9 @@ class Ui_MainWindow_TwitterInsights(object):
         self.graphicsView_communities.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.Qtab_Insights.addTab(self.communities, "")
 
+        # The K Core Decomposition tab
         self.decomposition = QtWidgets.QWidget()
         self.decomposition.setObjectName("decomposition")
-        # self.DecompositionShowBotsCheckBox = QtWidgets.QCheckBox(self.decomposition)
-        # self.DecompositionShowBotsCheckBox.setGeometry(QtCore.QRect(70, 20, 111, 41))
-        # self.DecompositionShowBotsCheckBox.setChecked(True)
-        # self.DecompositionShowBotsCheckBox.setObjectName("DecompositionShowBotsCheckBox")
-        # self.DecompositionShowBotsCheckBox.stateChanged.connect(self.handleDecompositionCheckboxes)
-        # self.DecompositionShowHumansCheckBox = QtWidgets.QCheckBox(self.decomposition)
-        # self.DecompositionShowHumansCheckBox.setGeometry(QtCore.QRect(70, 60, 171, 20))
-        # self.DecompositionShowHumansCheckBox.setChecked(True)
-        # self.DecompositionShowHumansCheckBox.setObjectName("DecompositionShowHumansCheckBox")
-        # self.DecompositionShowHumansCheckBox.stateChanged.connect(self.handleDecompositionCheckboxes)
 
         self.graphicsView_decomposition = QtWidgets.QWidget(self.decomposition)
         self.graphicsView_decomposition.webEngineView = QtWebEngineWidgets.QWebEngineView(self.graphicsView_decomposition)
@@ -100,6 +81,8 @@ class Ui_MainWindow_TwitterInsights(object):
         self.KValueLabel.setText("2")
         self.KValueLabel.setObjectName("KValueLabel")
         self.Qtab_Insights.addTab(self.decomposition, "")
+
+        # The Influencers tab
         self.influencers = QtWidgets.QWidget()
         self.influencers.setObjectName("influencers")
         self.InfluencersShowBotsCheckBox = QtWidgets.QCheckBox(self.influencers)
@@ -141,6 +124,8 @@ class Ui_MainWindow_TwitterInsights(object):
         self.graphicsView_influencers.setLayoutDirection(QtCore.Qt.RightToLeft)
 
         self.Qtab_Insights.addTab(self.influencers, "")
+
+        # The retweets tab
         self.retweets = QtWidgets.QWidget()
         self.retweets.setObjectName("retweets")
 
@@ -154,7 +139,7 @@ class Ui_MainWindow_TwitterInsights(object):
         self.graphicsView_retweets.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.Qtab_Insights.addTab(self.retweets, "")
 
-
+        # The centrality tab
         self.centrality = QtWidgets.QWidget()
         self.centrality.setObjectName("centrality")
         self.graphicsView_centrality = QtWidgets.QWidget(self.centrality)
@@ -188,18 +173,12 @@ class Ui_MainWindow_TwitterInsights(object):
     def retranslateUi(self, MainWindow_TwitterInsights):
         _translate = QtCore.QCoreApplication.translate
         MainWindow_TwitterInsights.setWindowTitle(_translate("MainWindow_TwitterInsights", "Twitter Insights"))
-        # self.CommunitiesShowBotsCheckBox.setText(_translate("MainWindow_TwitterInsights", "Show Bots"))
-        # self.CommunitiesShowHumansCheckBox.setText(_translate("MainWindow_TwitterInsights", "Show Humans"))
         self.Qtab_Insights.setTabText(self.Qtab_Insights.indexOf(self.communities), _translate("MainWindow_TwitterInsights", "   Communities      "))
-        # self.DecompositionShowBotsCheckBox.setText(_translate("MainWindow_TwitterInsights", "Show Bots"))
-        # self.DecompositionShowHumansCheckBox.setText(_translate("MainWindow_TwitterInsights", "Show Humans"))
         self.kvalue.setText(_translate("MainWindow_TwitterInsights", "K-Value"))
         self.Qtab_Insights.setTabText(self.Qtab_Insights.indexOf(self.decomposition), _translate("MainWindow_TwitterInsights", "   Decomposition    "))
         self.InfluencersShowBotsCheckBox.setText(_translate("MainWindow_TwitterInsights", "Show Bots"))
         self.InfluencersShowHumansCheckBox.setText(_translate("MainWindow_TwitterInsights", "Show Humans"))
         self.NumberOfAccounts.setText(_translate("MainWindow_TwitterInsights", "Number of Accounts"))
-        # self.Bots.setText(_translate("MainWindow_TwitterInsights", "Bots: "))
-        # self.Humans.setText(_translate("MainWindow_TwitterInsights", "Humans: "))
         self.Qtab_Insights.setTabText(self.Qtab_Insights.indexOf(self.influencers), _translate("MainWindow_TwitterInsights", "     Influencers       "))
         self.Qtab_Insights.setTabText(self.Qtab_Insights.indexOf(self.retweets), _translate("MainWindow_TwitterInsights", "       Users and Statuses          "))
         self.Qtab_Insights.setTabText(self.Qtab_Insights.indexOf(self.centrality), _translate("MainWindow_TwitterInsights", "       Centrality          "))
@@ -251,6 +230,7 @@ class Ui_MainWindow_TwitterInsights(object):
         self.graphicsView_decomposition.webEngineView.reload()
     # Handle Influencers Checkboxes
 
+    # Handle Influencers Checkboxes
     def handleInfluencersCheckboxes(self,state):
         #updateInfluencersdiagram(self.InfluencersShowBotsCheckBox.state(),self.InfluencersShowHumansCheckBox.state(),self.NumberOfAccountSlider.value())
         if state == QtCore.Qt.Unchecked:
@@ -272,25 +252,24 @@ if __name__ == "__main__":
     import sys
     print(
         f"current number of threads is {nk.getCurrentNumberOfThreads()}, lets increase this to {(nk.getMaxNumberOfThreads() / 2) + 1}")
+    # We want to use half or more than half of the available CPU cores
     nk.setNumberOfThreads((nk.getMaxNumberOfThreads() / 2) + 1)  # set the maximum number of available threads
     df = parser.parse_tweets_as_df("test.json")
-    print(df.columns)
     # Parsing graph from the dataframe:
     G, G_x = parser.get_graph(df)
     G_undirected, attributes = parser.get_graph(df, directed=False)
-    get_Top_Accounts(3,2)
+    get_Top_Accounts(3, 2)
 
-    # Algos
+    # Algos - run all the algos once at the start, later on the now created png and html files are just loaded
     plot_degree_centrality(G)
     plot_communities_info(G_undirected)
     print(f"Precomputing k-core decomp k_core 2 and 3")
     for i in range(2, 3):
         plot_k_core_decomposition(G_x, attributes, 2)
-    # plot_k_core_decomposition(G)
-    # available_k_cores = store_k_cores_decomposition(G_x)  # only call this once on every machine
     print(f"")
-    # print(list(G_x.nodes()))
     plot_User_Type_Ratio()
+
+    # Launching the GUI application
     app = QtWidgets.QApplication(sys.argv)
     MainWindow_TwitterInsights = QtWidgets.QMainWindow()
     ui = Ui_MainWindow_TwitterInsights()

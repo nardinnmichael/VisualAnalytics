@@ -10,10 +10,9 @@ import networkx as nx
 from pyvis.network import Network
 import textwrap
 import math
-# already used in the view_old.py in tab5. Works as intended.
 import parser
 
-
+# plots a matplotlib graph of the centrality degree of the network G and saves it as png
 def plot_degree_centrality(G):
     dd = sorted(nk.centrality.DegreeCentrality(G).run().scores(), reverse=True)
     degrees, numberOfNodes = numpy.unique(dd, return_counts=True)
@@ -27,8 +26,8 @@ def plot_degree_centrality(G):
     #plt.show()
     return fig
 
-# TODO: fix this. Implement in algos.py and call here or put everything here
-# this does not finish at my machine. Maybe the loops that are in the graph are a problem, not sure
+
+# creates a .html file of the k-core decomposition of a graph, k_count is the core count
 def plot_k_core_decomposition(G_x, attributes, k_count=2):
     os.makedirs('k_cores', exist_ok=True)
 
@@ -51,35 +50,11 @@ def plot_k_core_decomposition(G_x, attributes, k_count=2):
         node['shape'] = att[node['id']][1]
         node['size'] = 1 + 10 * sizes[node['id']]
 
-        #print(node)
-
     nt.show_buttons()
-    # nt.show("k_graph.html")
     nt.show(f"k_cores/{k_count}_core_graph.html")
 
-    #nx.draw_networkx(k, with_labels=True)
-    #nk.viztasks.drawGraph(G, node_size=[(k ** 2) * 20 for k in coreDec.scores()], with_labels=True)
     print("Showing the plot for {}".format(k))
     #plt.show()
-
-
-def store_k_cores_decomposition(G_x, k_max=20):
-    # Ensure 'k_cores' directory exists
-    os.makedirs('k_cores', exist_ok=True)
-
-    # Compute and store the graph for each k-core
-    for nr_cores in range(2, k_max + 1):
-        print(f"Computing k core {nr_cores}")
-        k = nx.k_core(G_x, k=nr_cores)
-        if k.number_of_nodes() == 0:
-            print(f"The graph has no nodes. Returning {nr_cores - 2}")
-            return nr_cores - 2
-        nt = Network('600px', '1400px', notebook=True, cdn_resources='remote')
-
-        # nt = Network('500px', '500px', notebook=True)
-        nt.from_nx(k)
-        nt.show(f"k_cores/{nr_cores}_core_graph.html")
-        nt.show('nx.html')
 
 
 # already used in the view_old.py in tab1. Works as intended.
@@ -104,6 +79,8 @@ def plot_communities_info(G):
     plt.savefig('./images/Communities.png')
     # plt.show()
     return fig
+
+
 def wrap_labels(ax, width, break_long_words=False):
     labels = []
     for label in ax.get_xticklabels():
@@ -112,10 +89,13 @@ def wrap_labels(ax, width, break_long_words=False):
                       break_long_words=break_long_words))
     ax.set_xticklabels(labels, rotation=0)
 
+
 def formatter(x, pos):
     return str(round(x / 1e6, 1)) + " M"
 
-def get_Top_Accounts(n,type):
+
+# finds the top n accounts in terms of follower count and creates a matplotlib bar chart
+def get_Top_Accounts(n, type):
     influencers = parser.get_Top_N_Accounts(n, type)
     influencers.plot(kind='bar', edgecolor='black', rot=0)
     ax = influencers.plot.bar(x='profile.name', y='profile.followers_count', rot=0, legend=False,
@@ -127,6 +107,7 @@ def get_Top_Accounts(n,type):
     plt.clf()
     #plt.show()
 
+# plots two matplotlib pie chart of 1. the ratio of users and bots and 2. the percentage of human / bot statuses
 def plot_User_Type_Ratio():
     # plot Percentage of Humans and Bots Users
     df = pd.read_pickle("df.pkl")

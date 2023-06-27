@@ -4,7 +4,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import time
 from pyvis.network import Network
-import numpy
 
 def calc_ranked_centrality(G):
     start = time.time()
