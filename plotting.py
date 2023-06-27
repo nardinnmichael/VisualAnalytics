@@ -28,28 +28,47 @@ def plot_degree_centrality(G):
 
 # TODO: fix this. Implement in algos.py and call here or put everything here
 # this does not finish at my machine. Maybe the loops that are in the graph are a problem, not sure
-def plot_k_core_decomposition(G):
+def plot_k_core_decomposition(G, k_count=2):
     print("Starting k-core")
-    coreDec = nk.centrality.CoreDecomposition(G)
-    print("Running coreDec")
-    coreDec.run()
-    set(coreDec.scores())
+    # coreDec = nk.centrality.CoreDecomposition(G)
+    # print("Running coreDec")
+    # coreDec.run()
+    # set(coreDec.scores())
     #print(coreDec.scores())
     #print("Setting scores")
     #set(coreDec.scores())
     #print(f"Plotting graph for {coreDec.scores()}")
     # code works from here, above code seems redundant
     nxG = nk.nxadapter.nk2nx(G)
-    k = nx.k_core(nxG)
+    k = nx.k_core(nxG, k=k_count)
     nt = Network('600px', '1400px',notebook=True, cdn_resources='remote')
 
     nt.from_nx(k)
-    nt.show("k_graph.html")
+    nt.show(f"k_cores/{k_count}k_graph.html")
 
     #nx.draw_networkx(k, with_labels=True)
     #nk.viztasks.drawGraph(G, node_size=[(k ** 2) * 20 for k in coreDec.scores()], with_labels=True)
     print("Showing the plot for {}".format(k))
     #plt.show()
+
+
+def store_k_cores_decomposition(G_x, k_max=20):
+    # Ensure 'k_cores' directory exists
+    os.makedirs('k_cores', exist_ok=True)
+
+    # Compute and store the graph for each k-core
+    for nr_cores in range(2, k_max + 1):
+        print(f"Computing k core {nr_cores}")
+        k = nx.k_core(G_x, k=nr_cores)
+        if k.number_of_nodes() == 0:
+            print(f"The graph has no nodes. Returning {nr_cores - 2}")
+            return nr_cores - 2
+        nt = Network('600px', '1400px', notebook=True, cdn_resources='remote')
+
+        # nt = Network('500px', '500px', notebook=True)
+        nt.from_nx(k)
+        nt.show(f"k_cores/{nr_cores}_core_graph.html")
+        nt.show('nx.html')
 
 
 # already used in the view_old.py in tab1. Works as intended.

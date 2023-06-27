@@ -71,7 +71,7 @@ class Ui_MainWindow_TwitterInsights(object):
         self.graphicsView_decomposition = QtWidgets.QWidget(self.decomposition)
         self.graphicsView_decomposition.webEngineView = QtWebEngineWidgets.QWebEngineView(self.graphicsView_decomposition)
         #decompositionHtmlPath = os.path.abspath(os.path.join(os.path.dirname('gui.py'), "./html/decomposition.html"))
-        decompositionHtmlPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "k_graph.html"))
+        decompositionHtmlPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "k_cores/3_core_graph.html"))
         self.graphicsView_decomposition.webEngineView.load(QtCore.QUrl().fromLocalFile(decompositionHtmlPath))
         self.graphicsView_decomposition.setGeometry(QtCore.QRect(60, 110, 1331, 551))
         self.graphicsView_decomposition.webEngineView.setFixedWidth(1400)
@@ -83,10 +83,11 @@ class Ui_MainWindow_TwitterInsights(object):
         self.KValueSlider.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.KValueSlider.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.KValueSlider.setAutoFillBackground(False)
-        self.KValueSlider.setMaximum(100)
-        self.KValueSlider.setSingleStep(10)
-        self.KValueSlider.setProperty("value", 50)
-        self.KValueSlider.setSliderPosition(50)
+        self.KValueSlider.setMaximum(3)
+        self.KValueSlider.setMinimum(2)
+        self.KValueSlider.setSingleStep(1)
+        self.KValueSlider.setProperty("value", 3)
+        self.KValueSlider.setSliderPosition(3)
         self.KValueSlider.setOrientation(QtCore.Qt.Horizontal)
         self.KValueSlider.setObjectName("KValueSlider")
         self.KValueSlider.valueChanged.connect(self.manageSliderChange)
@@ -96,7 +97,7 @@ class Ui_MainWindow_TwitterInsights(object):
         self.kvalue.setObjectName("kvalue")
         self.KValueLabel = QtWidgets.QLabel(self.decomposition)
         self.KValueLabel.setGeometry(QtCore.QRect(1210, 30, 55, 16))
-        self.KValueLabel.setText("50")
+        self.KValueLabel.setText("3")
         self.KValueLabel.setObjectName("KValueLabel")
         self.Qtab_Insights.addTab(self.decomposition, "")
         self.influencers = QtWidgets.QWidget()
@@ -207,8 +208,16 @@ class Ui_MainWindow_TwitterInsights(object):
     def manageSliderChange(self,value):
         if(self.centralwidget.sender().objectName() == "KValueSlider"):
             self.KValueLabel.setText(str(value))
+            if value == 2:
+                print("Displaying 2 core")
+                decompositionHtmlPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "k_cores/2_core_graph.html"))
+                self.graphicsView_decomposition.webEngineView.load(QtCore.QUrl().fromLocalFile(decompositionHtmlPath))
+            elif value == 3:
+                print("Displaying 3 core")
+                decompositionHtmlPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "k_cores/3_core_graph.html"))
+                self.graphicsView_decomposition.webEngineView.load(QtCore.QUrl().fromLocalFile(decompositionHtmlPath))
             # TODO: call algo, get new network, display the update
-            self.graphicsView_decomposition.webEngineView.reload()
+            # self.graphicsView_decomposition.webEngineView.reload()
         if(self.centralwidget.sender().objectName() == "NumberOfAccountSlider"):
             self.NumberOfAccountLabel.setText(str(value))
             if (self.InfluencersShowHumansCheckBox.isChecked() == False):
@@ -264,8 +273,8 @@ if __name__ == "__main__":
     print(
         f"current number of threads is {nk.getCurrentNumberOfThreads()}, lets increase this to {(nk.getMaxNumberOfThreads() / 2) + 1}")
     nk.setNumberOfThreads((nk.getMaxNumberOfThreads() / 2) + 1)  # set the maximum number of available threads
-    df = parser.parse_tweets_as_df("test.json")
-    print(df.columns)
+    df = parser.parse_tweets_as_df("train.json")
+    # print(df.columns)
     G, G_x = parser.get_graph(df)
     G_undirected, _ = parser.get_graph(df, directed=False)
     get_Top_Accounts(3,2)
@@ -273,7 +282,11 @@ if __name__ == "__main__":
     # Algos
     plot_degree_centrality(G)
     plot_communities_info(G_undirected)
-    plot_k_core_decomposition(G)
+    # plot_k_core_decomposition(G)
+    print(f"Precomputing k-core decomp k_core 2..20")
+    # available_k_cores = store_k_cores_decomposition(G_x)  # only call this once on every machine
+    print(f"")
+    # print(list(G_x.nodes()))
     plot_User_Type_Ratio()
     app = QtWidgets.QApplication(sys.argv)
     MainWindow_TwitterInsights = QtWidgets.QMainWindow()

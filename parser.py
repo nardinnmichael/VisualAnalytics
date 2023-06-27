@@ -4,7 +4,8 @@ import time
 import networkit as nk
 import os
 import numpy
-
+import networkx as nx
+import matplotlib as plt
 def parse_tweets_as_df(filename):
     start = time.time()
     columns_to_keep = ["ID", "tweet", "profile.id", "profile.name", "profile.followers_count", "profile.friends_count",
@@ -93,6 +94,17 @@ def get_graph(df, directed=True):
     #     print(n1, n2, attr)
     if directed is True:
         G_x = nk.nxadapter.nk2nx(G)  # convert from NetworKit.Graph to networkx.Graph
+        for node in G_x.nodes():
+            # u_id = node_to_id[node]
+            # profile_info = df.loc[df['ID'] == u_id]
+            # name = profile_info['profile.name']
+            # extra_info = f"{name}: Follower: {profile_info.get('profile.followers_count')}, Tweets: {profile_info.get('profile.statuses_count')}"
+            # G_x.nodes[node]['label'] = name
+            G_x.nodes[node]['title'] = 'extra_info'
+            # print(u_id)
+        # print(f"node 10 is {G_x.nodes[100]}")
+        print(f"There are {len(G_x.nodes())} nodes and {len(node_to_id)} node to id mapping. Also {len(id_to_node)} id to node mappings")
+
         return G, G_x
     else:
         return G, None
