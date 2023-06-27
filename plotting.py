@@ -30,6 +30,8 @@ def plot_degree_centrality(G):
 # TODO: fix this. Implement in algos.py and call here or put everything here
 # this does not finish at my machine. Maybe the loops that are in the graph are a problem, not sure
 def plot_k_core_decomposition(G_x, attributes, k_count=2):
+    os.makedirs('k_cores', exist_ok=True)
+
     print("Starting k-core")
     k = nx.k_core(G_x, k=k_count)
 
