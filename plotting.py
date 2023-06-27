@@ -28,7 +28,7 @@ def plot_degree_centrality(G):
 
 # TODO: fix this. Implement in algos.py and call here or put everything here
 # this does not finish at my machine. Maybe the loops that are in the graph are a problem, not sure
-def plot_k_core_decomposition(G, k_count=2):
+def plot_k_core_decomposition(G, att, k_count=2):
     print("Starting k-core")
     # coreDec = nk.centrality.CoreDecomposition(G)
     # print("Running coreDec")
@@ -42,8 +42,25 @@ def plot_k_core_decomposition(G, k_count=2):
     nxG = nk.nxadapter.nk2nx(G)
     k = nx.k_core(nxG, k=k_count)
     nt = Network('600px', '1400px',notebook=True, cdn_resources='remote')
+    k = nx.k_core(nxG)
 
+
+    nt = Network('600px', '1400px', notebook=True, cdn_resources="remote",
+                 bgcolor= "white", font_color="black")
+    nt.show_buttons(filter_=['physics'])
+#(Node colors and user verification attributes added)
     nt.from_nx(k)
+
+    # Assigning colors to each node based on values in label column of original data
+    for node in nt.nodes:
+
+        node['color'] = att[node['id']][0]
+        node['shape'] = att[node['id']][1]
+
+        #print(node)
+
+    nt.show_buttons()
+    nt.show("k_graph.html")
     nt.show(f"k_cores/{k_count}k_graph.html")
 
     #nx.draw_networkx(k, with_labels=True)

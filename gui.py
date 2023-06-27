@@ -273,15 +273,17 @@ if __name__ == "__main__":
     print(
         f"current number of threads is {nk.getCurrentNumberOfThreads()}, lets increase this to {(nk.getMaxNumberOfThreads() / 2) + 1}")
     nk.setNumberOfThreads((nk.getMaxNumberOfThreads() / 2) + 1)  # set the maximum number of available threads
-    df = parser.parse_tweets_as_df("train.json")
-    # print(df.columns)
-    G, G_x = parser.get_graph(df)
-    G_undirected, _ = parser.get_graph(df, directed=False)
+    df = parser.parse_tweets_as_df("test.json")
+    print(df.columns)
+    # Parsing graph from the dataframe:
+    G, G_x, att = parser.get_graph(df)
+    G_undirected, att = parser.get_graph(df, directed=False)
     get_Top_Accounts(3,2)
 
     # Algos
     plot_degree_centrality(G)
     plot_communities_info(G_undirected)
+    plot_k_core_decomposition(G, att)
     # plot_k_core_decomposition(G)
     print(f"Precomputing k-core decomp k_core 2..20")
     # available_k_cores = store_k_cores_decomposition(G_x)  # only call this once on every machine
