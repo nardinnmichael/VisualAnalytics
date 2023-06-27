@@ -54,15 +54,19 @@ def get_graph(df, directed=True):
     id_to_node = {}
     node_to_id = {}
     node_to_att = {}
+    node_to_name = {}
+    node_to_size = {}
     # Add nodes and edges to the graph
     for idx, row in df.iterrows():
         user_id = row['ID']
+        name = row['profile.name'] + ': Statuses: ' + str(row['profile.statuses_count']) + ', Followers: ' + str(row['profile.followers_count'])
+        size = max(1, row['profile.statuses_count']) * max(1, row['profile.followers_count'])
 
-        if row['label'] == 1:
+        if row['label'] == 0:
             col = 'green'
-        else :
+        else:
             col = 'red'
-        if 'True' in row['profile.verified'] :
+        if 'True' in row['profile.verified']:
             shape = 'square'
         else:
             shape = 'dot'
@@ -74,6 +78,8 @@ def get_graph(df, directed=True):
             node_to_id[new_node] = user_id
             att[new_node] = col
             node_to_att[new_node] = [col, shape]
+            node_to_name[new_node] = name
+            node_to_size[new_node] = size
 
         for following_id in row['neighbor.following']:
             # If the following_id is not in the dictionary, add a new node
@@ -82,7 +88,9 @@ def get_graph(df, directed=True):
                 id_to_node[following_id] = new_node
                 node_to_id[new_node] = following_id
                 att[new_node] = col
-                node_to_att[new_node] = [col,shape]
+                node_to_att[new_node] = [col, shape]
+                node_to_name[new_node] = name
+                node_to_size[new_node] = size
 
             G.addEdge(id_to_node[user_id], id_to_node[following_id])
 
@@ -93,7 +101,9 @@ def get_graph(df, directed=True):
                 id_to_node[follower_id] = new_node
                 node_to_id[new_node] = follower_id
                 att[new_node] = col
-                node_to_att[new_node] = [col,shape]
+                node_to_att[new_node] = [col, shape]
+                node_to_name[new_node] = name
+                node_to_size[new_node] = size
 
         G.addEdge(id_to_node[follower_id], id_to_node[user_id])
 
@@ -119,14 +129,13 @@ def get_graph(df, directed=True):
             # name = profile_info['profile.name']
             # extra_info = f"{name}: Follower: {profile_info.get('profile.followers_count')}, Tweets: {profile_info.get('profile.statuses_count')}"
             # G_x.nodes[node]['label'] = name
-            G_x.nodes[node]['title'] = 'extra_info'
+            G_x.nodes[node]['title'] = node_to_name[node]
             # print(u_id)
         # print(f"node 10 is {G_x.nodes[100]}")
         print(f"There are {len(G_x.nodes())} nodes and {len(node_to_id)} node to id mapping. Also {len(id_to_node)} id to node mappings")
 
         return G, G_x
-        return G, G_x, node_to_att
     else:
 
-        return G, node_to_att
+        return G, {'node_to_att': node_to_att, 'node_to_size': node_to_size}
 

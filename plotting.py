@@ -9,6 +9,7 @@ import pandas as pd
 import networkx as nx
 from pyvis.network import Network
 import textwrap
+import math
 # already used in the view_old.py in tab5. Works as intended.
 import parser
 
@@ -28,40 +29,31 @@ def plot_degree_centrality(G):
 
 # TODO: fix this. Implement in algos.py and call here or put everything here
 # this does not finish at my machine. Maybe the loops that are in the graph are a problem, not sure
-def plot_k_core_decomposition(G, att, k_count=2):
+def plot_k_core_decomposition(G_x, attributes, k_count=2):
     print("Starting k-core")
-    # coreDec = nk.centrality.CoreDecomposition(G)
-    # print("Running coreDec")
-    # coreDec.run()
-    # set(coreDec.scores())
-    #print(coreDec.scores())
-    #print("Setting scores")
-    #set(coreDec.scores())
-    #print(f"Plotting graph for {coreDec.scores()}")
-    # code works from here, above code seems redundant
-    nxG = nk.nxadapter.nk2nx(G)
-    k = nx.k_core(nxG, k=k_count)
-    nt = Network('600px', '1400px',notebook=True, cdn_resources='remote')
-    k = nx.k_core(nxG)
-
+    k = nx.k_core(G_x, k=k_count)
 
     nt = Network('600px', '1400px', notebook=True, cdn_resources="remote",
                  bgcolor= "white", font_color="black")
     nt.show_buttons(filter_=['physics'])
-#(Node colors and user verification attributes added)
     nt.from_nx(k)
 
     # Assigning colors to each node based on values in label column of original data
-    for node in nt.nodes:
+    att = attributes["node_to_att"]
+    sizes = [math.log10(x) if x > 0 else 0 for x in attributes["node_to_size"]]
+    # sizes = [math.sqrt(x) for x in attributes["node_to_size"]]
+    print(f"size go from {sizes[0]} to {sizes[-2]}")
 
+    for node in nt.nodes:
         node['color'] = att[node['id']][0]
         node['shape'] = att[node['id']][1]
+        node['size'] = 1 + 10 * sizes[node['id']]
 
         #print(node)
 
     nt.show_buttons()
-    nt.show("k_graph.html")
-    nt.show(f"k_cores/{k_count}k_graph.html")
+    # nt.show("k_graph.html")
+    nt.show(f"k_cores/{k_count}_core_graph.html")
 
     #nx.draw_networkx(k, with_labels=True)
     #nk.viztasks.drawGraph(G, node_size=[(k ** 2) * 20 for k in coreDec.scores()], with_labels=True)
