@@ -22,8 +22,8 @@ if __name__ == '__main__':
 
 
     # Tryout-zone of algos: --------------------------------------------------------------
-    #plot_degree_centrality(G)
-    #plot_communities_info(G_undirected)
+    plot_degree_centrality(G)
+    plot_communities_info(G_undirected)
     #basic_network_plot(G)
     # this does not work because we have loops in our graph:
     plot_k_core_decomposition(G, att)

@@ -8,11 +8,9 @@ import numpy
 def parse_tweets_as_df(filename):
     start = time.time()
     columns_to_keep = ["ID", "tweet", "profile.id", "profile.name", "profile.followers_count", "profile.friends_count",
-<<<<<<< HEAD
+
                        "profile.verified", "profile.statuses_count", "neighbor.following", "neighbor.follower","label"]
-=======
-                       "profile.verified", "profile.statuses_count", "neighbor.following", "neighbor.follower","label"] #added label
->>>>>>> ffb57f0 (Node colors and user verification attributes added)
+# (Node colors and user verification attributes added)
     with open(filename, 'r') as file:
         objects = ijson.items(file, 'item')
 
@@ -117,8 +115,6 @@ def get_graph(df, directed=True):
         G_x = nk.nxadapter.nk2nx(G)  # convert from NetworKit.Graph to networkx.Graph
         return G, G_x, node_to_att
     else:
-<<<<<<< HEAD
-        return G, None
-=======
+
         return G, node_to_att
->>>>>>> ffb57f0 (Node colors and user verification attributes added)
+

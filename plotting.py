@@ -41,15 +41,12 @@ def plot_k_core_decomposition(G, att):
     # code works from here, above code seems redundant
     nxG = nk.nxadapter.nk2nx(G)
     k = nx.k_core(nxG)
-<<<<<<< HEAD
-    nt = Network('600px', '1400px',notebook=True, cdn_resources='remote')
 
-=======
-    nt = Network(notebook=True, cdn_resources="remote", bgcolor= "white", font_color="black",
-                 height= "750px",
-                 width= "100%")
+
+    nt = Network('600px', '1400px', notebook=True, cdn_resources="remote",
+                 bgcolor= "white", font_color="black")
     nt.show_buttons(filter_=['physics'])
->>>>>>> ffb57f0 (Node colors and user verification attributes added)
+#(Node colors and user verification attributes added)
     nt.from_nx(k)
     
     # Assigning colors to each node based on values in label column of original data
